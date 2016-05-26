@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Javascript</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>	
+	<nav class="navbar navbar-default">
+	  <div class="container">	    
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="index.html">STAT Group</a>
+	    </div>
+	    
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">	    	
+	      <div class="navbar-form navbar-right">
+	        <input type="text" class="form-control" placeholder="Пошук по імені" id="inputName">
+	        <button type="submit" class="btn btn-default navbar-right" onclick="searchByName()">Пошук</button>
+	      </div>	     
+	    </div>
+	  </div>
+	</nav>
+
+	<div class="container">		
+		<div class="row content">	    
+		    <div class="well">
+		    <div class="dropdown">
+			    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Статистика
+			    <span class="caret"></span></button>
+			    <ul class="dropdown-menu">
+			      <li><a href="#"><button type="button" class="btn" onclick="PrintA()">Группа А</button></a></li>
+			      <li><a href="#"><button type="button" class="btn" onclick="PrintB()">Группа B</button></a></li>
+			      <li><a href="#"><button type="button" class="btn" onclick="PrintC()">Группа C</button></a></li>
+			      <li class="divider"></li>
+			      <li><a href="#"><button type="button" class="btn" onclick="PrintAll()">Всі групи</button></a></li>
+			    </ul>
+  			</div>
+		<div class="row">
+				<div class="container">			
+					<div id="ResultSearchByName"></div>		
+				</div>						
+				<div class="container">
+					<div id="ResultA"></div>
+				</div>
+				<div class="container">
+					<div id="ResultB"></div>
+				</div>
+				<div class="container">		
+					<div id="ResultC"></div>
+				</div>
+				<div class="container">		
+					<div id="Result"></div>						
+				</div>
+			</div>
+		</div>    
+		</div>		
+	</div>
+	
+	<script>
+		function searchByName(){
+			var isname = $('#inputName').val();
+			if(isname){			
+				var res2 = base.searchByName(isname);
+			}			
+			var arr = "";
+			var step = 1;
+			var sum = 0;
+			var n = 0;
+			for(var i = 0; i < res2.length; i++){							
+				arr += '<table class="table table-bordered"><caption><h2><i>Name #' + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">' + (step++) + '</th><td>'+res2[0].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[0].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[0].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+								n++;
+							}else{						
+								parseFloat(sum += res2[i].predmet[j].digit[k]);
+							}
+						}	
+						arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+						sum = 0;n=0;
+				}
+				arr+='</tbody></table>';									
+			}
+			if(!arr){
+				arr = 'Not found';
+			}
+			$('#ResultSearchByName').html(arr);								
+		}
+	</script>
+	<script>
+		function PrintAll(){			
+			var res2 = base.PrintMegaArray();
+			console.log(res2[1].predmet[0].digit.length);				
+			var arr = "";
+			var step = 1;			
+			var sum = 0;
+			var n = 0;			
+			arr += '<h2>Всі групи</h2><br>';	
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('#Result').html(arr);			
+		}
+	</script>
+	<script>
+		function PrintA(){			
+			var res2 = base.GroupArrayA();
+			console.log(res2.length);				
+			var arr = "";
+			var step = 1;
+			var sum = 0;
+			var n = 0;
+			arr += '<h2>Група A</h2><br>';			
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('#ResultA').html(arr);			
+		}
+	</script>
+	<script>
+		function PrintB(){			
+			var res2 = base.GroupArrayB();
+			console.log(typeof res2);				
+			var arr = "";
+			var step = 1;
+			var sum = 0;
+			var n = 0;	
+			arr += '<h2>Група B</h2><br>';		
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('#ResultB').html(arr);			
+		}
+	</script>
+	<script>
+		function PrintC(){			
+			var res2 = base.GroupArrayC();
+			console.log(res2.length);				
+			var arr = "";
+			var step = 1;	
+			var sum = 0;
+			var n = 0;
+			arr += '<h2>Група С</h2><br>';		
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('#ResultC').html(arr);			
+		}
+	</script>	
+	<script src="js/base.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>    
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
