@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Student statistic</title>	
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>	
+	<nav class="navbar navbar-default">
+	  <div class="container">	    
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="index.html">STAT Group</a>
+	    </div>
+	    
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">	    	
+	      <div class="navbar-form navbar-right">
+	        <input type="text" class="form-control" placeholder="Пошук по імені" id="inputName">
+	        <button type="submit" class="btn btn-default navbar-right" onclick="searchByName()">Пошук</button>	        
+	      </div>	     
+	    </div>
+	  </div>
+	</nav>
+
+<div class="container-fluid">
+	<div class="container">  
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" onclick="PrintA()">Группа А</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal1" onclick="PrintB()">Группа B</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2" onclick="PrintC()">Группа C</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalAll" onclick="PrintAll()">Всі</button>
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalStat" onclick="StatAll()">Статистика</button>		  
+		  <div class="modal fade" id="myModal" role="dialog">
+		    <div class="modal-dialog modal-lg">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Група А</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div id="ResultA"></div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		      </div>	      
+		    </div>
+		  </div>
+		  <div class="modal fade" id="myModal1" role="dialog">
+		    <div class="modal-dialog modal-lg">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Група B</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div id="ResultB"></div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		      </div>	      
+		    </div>
+		  </div>
+		  <div class="modal fade" id="myModal2" role="dialog">
+		    <div class="modal-dialog modal-lg">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Група C</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div id="ResultC"></div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		      </div>	      
+		    </div>
+		  </div>	
+		  <div class="modal fade" id="myModalAll" role="dialog">
+		    <div class="modal-dialog modal-lg">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Всі</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div id="Result"></div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		      </div>	      
+		    </div>
+		  </div> 
+		  <div class="modal fade" id="myModalStat" role="dialog">
+		    <div class="modal-dialog modal-lg">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="modal-title">Статистика</h4>
+		        </div>
+		        <div class="modal-body">
+		          <div id="ResultStat"></div>
+		        </div>
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        </div>
+		      </div>	      
+		    </div>
+		  </div> 
+	</div>
+	<div class="container">			
+		<div id="ResultSearchByName"></div>		
+	</div>
+</div>
+	<script>
+		function searchByName(){
+			var isname = $('#inputName').val();
+			if(isname){			
+				var res2 = base.searchByName(isname);
+			}			
+			var arr = "";
+			var step = 1;
+			var sum = 0;
+			var n = 0;
+			for(var i = 0; i < res2.length; i++){							
+				arr += '<table class="table table-bordered"><caption><h2><i>Name #' + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">' + (step++) + '</th><td>'+res2[0].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[0].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[0].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+								n++;
+							}else{						
+								parseFloat(sum += res2[i].predmet[j].digit[k]);
+							}
+						}	
+						arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+						sum = 0;n=0;
+				}
+				arr+='</tbody></table>';									
+			}
+			if(!arr){
+				arr = 'Not found';
+			}
+			$('#ResultSearchByName').html(arr);								
+		}
+	</script>
+	<script>
+		function PrintAll(){			
+			var res2 = base.PrintMegaArray();
+			console.log(res2[1].predmet[0].digit.length);				
+			var arr = "";
+			var step = 1;			
+			var sum = 0;
+			var n = 0;			
+			arr += '<h2>Всі групи</h2><br>';	
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('div#Result').html(arr);			
+		}
+	</script>
+	<script>
+		function PrintA(){			
+			var res2 = base.GroupArrayA();
+			console.log(res2.length);				
+			var arr = "";
+			var step = 1;
+			var sum = 0;
+			var n = 0;
+			arr += '<h2>Група A</h2><br>';			
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('div#ResultA').html(arr);			
+		}
+	</script>
+	<script>
+		function PrintB(){			
+			var res2 = base.GroupArrayB();
+			console.log(typeof res2);				
+			var arr = "";
+			var step = 1;
+			var sum = 0;
+			var n = 0;	
+			arr += '<h2>Група B</h2><br>';		
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('div#ResultB').html(arr);			
+		}
+	</script>
+	<script>
+		function PrintC(){			
+			var res2 = base.GroupArrayC();
+			console.log(res2.length);				
+			var arr = "";
+			var step = 1;	
+			var sum = 0;
+			var n = 0;
+			arr += '<h2>Група С</h2><br>';		
+			for(var i = 0; i < res2.length; i++){				
+				arr += '<table class="table table-bordered"><caption><h2><i>Студент #' + (i+1) + ': </i>'+res2[i].name + '</h2></caption><thead><th>#</th><th>Предмет</th><th colspan="10">Оцінкa</th><th colspan="1">Середнє</th><th colspan="1">Пропуски</th></thead><tbody>';	
+				for(var j = 0; j < res2[0].predmet.length; j++){					
+					arr += '<tr><th scope="row">'+(step++)+'</th><td>'+res2[i].predmet[j].name + '</td>';
+					for(var k = 0; k < res2[1].predmet[0].digit.length; k++){
+						arr += '<td>' + res2[i].predmet[j].digit[k] + '</td>';
+						if(res2[i].predmet[j].digit[k] == 'н'){
+							n++;
+						}else{						
+							parseFloat(sum += res2[i].predmet[j].digit[k]);
+						}
+					}	
+					arr += '<td>' + sum/k + '</td><td>'+n+'</td></tr>';
+					sum = 0;n=0;
+				}
+				arr+='</tbody></table>';
+				step = 1;							
+			}
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('div#ResultC').html(arr);			
+		}
+	</script>	
+	<script>
+		function StatAll(){			
+			var arr = "";
+			var arrA ="";
+			var arrB ="";
+			var arrC ="";
+			var A = base.GroupArrayA();
+			var B = base.GroupArrayB();
+			var C = base.GroupArrayC();
+			var sumA = 0;
+			var sumB = 0;
+			var sumC = 0;
+			var nA = 0;
+			var nB = 0;
+			var nC = 0;
+			arrA += '<h2>Група А</h2>';
+			for(var i = 0; i < A.length; i++){									
+				for(var j = 0; j < A[0].predmet.length; j++){					
+					for(var k = 0; k < A[0].predmet[0].digit.length; k++){						
+						if(A[i].predmet[j].digit[k] == 'н'){
+							nA++;
+						}else{						
+							parseFloat(sumA += A[i].predmet[j].digit[k]);
+						}
+					}					
+				}								
+			}
+			arrA += '<h4>Середній бал студентів: ' + sumA/500 + '</h4><h4>Пропусків в групі: ' + nA + '</h4>';
+
+			arrB += '<br><h2>Група B</h2>';
+			for(var i = 0; i < B.length; i++){									
+				for(var j = 0; j < B[0].predmet.length; j++){					
+					for(var k = 0; k < B[0].predmet[0].digit.length; k++){						
+						if(B[i].predmet[j].digit[k] == 'н'){
+							nB++;
+						}else{						
+							parseFloat(sumB += B[i].predmet[j].digit[k]);
+						}
+					}					
+				}								
+			}
+			arrB += '<h4>Середній бал студентів: ' + sumB/500 + '</h4><h4>Пропусків в групі: ' + nB + '</h4>';
+
+			arrC += '<br><h2>Група C</h2>';
+			for(var i = 0; i < C.length; i++){									
+				for(var j = 0; j < C[0].predmet.length; j++){					
+					for(var k = 0; k < C[0].predmet[0].digit.length; k++){						
+						if(C[i].predmet[j].digit[k] == 'н'){
+							nC++;
+						}else{						
+							parseFloat(sumC += C[i].predmet[j].digit[k]);
+						}
+					}					
+				}								
+			}
+			arrC += '<h4>Середній бал студентів: ' + sumC/500 + '</h4><h4>Пропусків в групі: ' + nC + '</h4>';
+
+			arr += arrA + arrB + arrC; 
+			if(!arr){
+				arr = 'not found';
+			}			
+			$('div#ResultStat').html(arr);							
+		}
+	</script>
+	<script src="js/base.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>    
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
